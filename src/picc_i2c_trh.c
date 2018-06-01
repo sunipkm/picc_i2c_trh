@@ -1,20 +1,23 @@
+#include <picc_i2c_trh.h>
+
 hdc1010_dev * hdc1010_begin ( uint8_t address )
 {
 	hdc1010_dev * dev = ( hdc1010_dev * ) malloc ( sizeof ( hdc1010_dev ) ) ;
 
 	dev -> address = address ;
 
-	dev -> i2cdevbus = open ( I2C_FILE , 0_RDWR ) ;
+	dev -> i2cdevbus = open ( I2C_DEV_FILE , O_RDWR ) ;
 
-	if ( i2cdevbus < 0 )
+	if ( dev -> i2cdevbus < 0 )
 	{
 		fprintf ( stderr,"FILE %s Line %d Function %s: Error opening device %s, %s.\n" , __FILE__ , __LINE__ , __FUNCTION__ , I2C_FILE , strerror ( errno ) ) ;
-		return false ;
+		return ( hdc1010_dev * ) NULL ;
 	}
 
-	if ( ioctl ( i2cdevbus , I2C_SLAVE, address ) < 0 ) 
+	if ( ioctl ( dev -> i2cdevbus , I2C_SLAVE, address ) < 0 ) 
 	{
 		fprintf ( stderr,"FILE %s Line %d: ioctl error: %s\n", __FILE__ , __LINE__ , strerror(errno) ) ;
+		return ( hdc1010_dev * ) NULL ;
 	}
 
 	hdc1010_writeData ( dev , CONFIGURATION ) ;
@@ -54,7 +57,7 @@ float hdc1010_readT ( hdc1010_dev * dev )
 		{
 			dev -> trh = 0b01 ; //temperature has been read
 		}
-		if ( _trh == 0b10 ) //if humidity has been read set both to 0
+		if ( dev -> trh == 0b10 ) //if humidity has been read set both to 0
 		{
 			dev -> trh = 0b00 ;
 			dev -> trh_buf = 0x0000000 ;
@@ -82,7 +85,7 @@ float hdc1010_readH ( hdc1010_dev * dev )
 		{
 			dev -> trh = 0b10 ; //temperature has been read
 		}
-		if ( _trh == 0b01 ) //if humidity has been read set both to 0
+		if ( dev -> trh == 0b01 ) //if humidity has been read set both to 0
 		{
 			dev -> trh = 0b00 ;
 			dev -> trh_buf = 0x0000000 ;
@@ -90,9 +93,9 @@ float hdc1010_readH ( hdc1010_dev * dev )
 	}
 	else
 	{
-		rawT = hdc1010_readData(dev , HUMIDITY) ;
+		rawH = hdc1010_readData(dev , HUMIDITY) ;
 	}
-	return ( 1.0 * rawT / 65536.0 ) * 100. ;
+	return ( 1.0 * rawH / 65536.0 ) * 100. ;
 }
 
 uint16_t hdc1010_readMfId(hdc1010_dev * dev) {
@@ -112,7 +115,7 @@ hdc1010_regs hdc1010_readReg( hdc1010_dev * dev ) {
 void hdc1010_writeReg(hdc1010_dev * dev , hdc1010_regs reg) {
 	hdc1010_writeData(dev , CONFIGURATION);
 	hdc1010_writeData(dev , reg.rawData);
-	hdc1010_writeData(0x00);
+	hdc1010_writeData(dev , 0x00);
 	usleep(PICC_TIME_USEC);
 	return ;
 }
@@ -168,8 +171,8 @@ void hdc1010_acquisition_mode ( hdc1010_dev * dev , uint8_t state )
 {
 	if ( state )
 	{
-		hd1010_regs reg = hdc1010_readReg ( dev ) ;
-		reg.heater = 0 ;
+		hdc1010_regs reg = hdc1010_readReg ( dev ) ;
+		reg.Heater = 0 ;
 		reg.ModeOfAcquisition = 0 ; //non-simultaneous
 		hdc1010_writeReg ( dev , reg ) ;
 		dev -> mode = 0 ;
@@ -177,8 +180,8 @@ void hdc1010_acquisition_mode ( hdc1010_dev * dev , uint8_t state )
 	}
 	else
 	{
-		hd1010_regs reg = hdc1010_readReg ( dev ) ;
-		reg.heater = 0 ;
+		hdc1010_regs reg = hdc1010_readReg ( dev ) ;
+		reg.Heater = 0 ;
 		reg.ModeOfAcquisition = 1 ; //simultaneous
 		hdc1010_writeReg ( dev , reg ) ;
 		dev -> mode = 1 ;
@@ -188,7 +191,7 @@ void hdc1010_acquisition_mode ( hdc1010_dev * dev , uint8_t state )
 	return ;
 }
 
-uint32_t hdc1010_getTRH ( hdc1010 * dev )
+uint32_t hdc1010_getTRH ( hdc1010_dev * dev )
 {
 	uint32_t result = 0x0000 ;
 
