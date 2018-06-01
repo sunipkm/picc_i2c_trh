@@ -103,7 +103,7 @@ void hdc1010_heatUp ( hdc1010_dev * , uint8_t ) ; //number of seconds to heat up
 
 float hdc1010_readT ( hdc1010_dev * ) ; //read temperature from device
 
-float hdc1010_readRH ( hdc1010_dev * ) ; //read humidity from device
+float hdc1010_readH ( hdc1010_dev * ) ; //read humidity from device
 
 void hdc1010_sleep ( uint32_t ) ; //number of ms to sleep, wrapped around usleep
 void hdc1010_free ( hdc1010_dev * ) ;

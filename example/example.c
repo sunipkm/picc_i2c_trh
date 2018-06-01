@@ -16,7 +16,7 @@ int main ( void )
 
 	uint64_t time = 0 ;
 
-	while(true)
+	while(1)
 	{
 		printf ( "Acquisition Mode: Independent\n" ) ;
 		printf ( "At %d seconds:\n" , time ) ;
