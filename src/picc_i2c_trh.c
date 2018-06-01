@@ -38,6 +38,7 @@ hdc1010_dev * hdc1010_begin ( uint8_t address )
 
 void hdc1010_free ( hdc1010_dev * dev )
 {
+	close ( dev -> i2cdevbus ) ;
 	free ( dev ) ;
 	return ;
 }
@@ -128,7 +129,8 @@ void hdc1010_heatUp(hdc1010_dev * dev , uint8_t seconds)
 	hdc1010_writeReg(dev , reg);
 
 	uint8_t buf[4];
-	for (int i = 1; i < (seconds*66); i++) {
+	int i ;
+	for (i = 1; i < (seconds*66); i++) {
 		hdc1010_writeData(dev,TEMPERATURE);
 		usleep(20000);
 		hdc1010_readBytes(dev,buf,4) ;

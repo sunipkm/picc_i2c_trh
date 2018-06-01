@@ -8,7 +8,7 @@ CDR=$(shell pwd)
 
 
 LDFLAGS=-shared
-override CFLAGS+= -O2 -std=gnu99 -fPIC -Wall -I include/
+override CFLAGS+= -O2 -fPIC -Wall -I include/
 
 EDLDFLAGS:=$(LDFLAGS)
 
