@@ -1,6 +1,6 @@
-hdc1010 * hdc1010_begin ( uint8_t address )
+hdc1010_dev * hdc1010_begin ( uint8_t address )
 {
-	hdc1010 * dev = ( hdc1010 * ) malloc ( sizeof ( hdc1010_dev ) ) ;
+	hdc1010_dev * dev = ( hdc1010_dev * ) malloc ( sizeof ( hdc1010_dev ) ) ;
 
 	dev -> address = address ;
 
@@ -33,7 +33,7 @@ hdc1010 * hdc1010_begin ( uint8_t address )
 	return dev ;
 }
 
-void hdc1010_free ( hdc1010 * dev )
+void hdc1010_free ( hdc1010_dev * dev )
 {
 	free ( dev ) ;
 	return ;
@@ -103,7 +103,7 @@ uint16_t hdc1010_readDevId(hdc1010_dev * dev) {
 	return hdc1010_readData(dev , DEVICE_ID);
 }
 
-hdc1010_regs hdc1010_readReg( hdc1010 * dev ) {
+hdc1010_regs hdc1010_readReg( hdc1010_dev * dev ) {
 	hdc1010_regs reg;
 	reg.rawData = (hdc1010_readData(dev , CONFIGURATION) >> 8);
 	return reg;
@@ -136,7 +136,7 @@ void hdc1010_heatUp(hdc1010_dev * dev , uint8_t seconds)
 	return ;
 }
 
-uint16_t hdc1010_readData ( hdc1010 * dev , uint8_t reg )
+uint16_t hdc1010_readData ( hdc1010_dev * dev , uint8_t reg )
 {
 	hdc1010_writeData(dev , reg) ;
 	uint8_t buf[2] ;
@@ -144,14 +144,14 @@ uint16_t hdc1010_readData ( hdc1010 * dev , uint8_t reg )
 	return ( ((uint16_t)buf[0]) << 8 | buf[1] ) ;
 }
 
-void hdc1010_writeData(hdc1010 * dev , uint8_t val)
+void hdc1010_writeData(hdc1010_dev * dev , uint8_t val)
 {
 	uint8_t buf = val ;
 	write ( dev -> i2cdevbus , &buf , 1 ) ;
 	usleep ( PICC_TIME_USEC ) ; //wait 20ms before release to give time for response
 }
 
-void hdc1010_readBytes ( hdc1010 * dev , uint8_t * buf , uint8_t n )
+void hdc1010_readBytes ( hdc1010_dev * dev , uint8_t * buf , uint8_t n )
 {
 	read( dev -> i2cdevbus , buf , n ) ;
 	return ;
@@ -164,7 +164,7 @@ void hdc1010_sleep ( uint32_t ms )
 	return ;
 }
 
-void hdc1010_acquisition_mode ( hdc1010 * dev , uint8_t state )
+void hdc1010_acquisition_mode ( hdc1010_dev * dev , uint8_t state )
 {
 	if ( state )
 	{
