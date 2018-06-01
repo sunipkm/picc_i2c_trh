@@ -10,7 +10,7 @@ hdc1010_dev * hdc1010_begin ( uint8_t address )
 
 	if ( dev -> i2cdevbus < 0 )
 	{
-		fprintf ( stderr,"FILE %s Line %d Function %s: Error opening device %s, %s.\n" , __FILE__ , __LINE__ , __FUNCTION__ , I2C_FILE , strerror ( errno ) ) ;
+		fprintf ( stderr,"FILE %s Line %d Function %s: Error opening device %s, %s.\n" , __FILE__ , __LINE__ , __FUNCTION__ , I2C_DEV_FILE , strerror ( errno ) ) ;
 		return ( hdc1010_dev * ) NULL ;
 	}
 
