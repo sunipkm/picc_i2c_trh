@@ -16,15 +16,15 @@ int main ( void )
 
 	uint64_t time = 0 ;
 
+	printf ( "Acquisition Mode: Independent\n" ) ;
 	while(1)
 	{
-		printf ( "Acquisition Mode: Independent\n" ) ;
 		printf ( "At %d seconds:\n" , time ) ;
 		printf ( "Temperature from Device 1: %.3f C\n" , hdc1010_readT(dev1)) ;
 		printf ( "Temperature from Device 2: %.3f C\n\n" , hdc1010_readT(dev2)) ;
 		printf ( "Relative Humidity from Device 1: %.3f %\n" , hdc1010_readH(dev1)) ;
 		printf ( "Relative Humidity from Device 2: %.3f %\n\n" , hdc1010_readH(dev2)) ;
-		time = time + 10 ;
+		time += 10 ;
 		if ( time > 20 )
 			break ;
 		hdc1010_sleep(10000) ; //spit out numbers in 1 second intervals
