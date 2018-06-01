@@ -32,7 +32,7 @@ int main ( void )
 			printf("\x1b[A") ;
 	}
 
-	printf ( "Acquisition mode: Simultaneous\n\n")
+	printf ( "Acquisition mode: Simultaneous\n\n") ;
 
 	time = 0 ;
 
