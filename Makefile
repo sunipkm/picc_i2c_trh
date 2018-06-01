@@ -19,8 +19,8 @@ RMDIR=rmdir -v
 TARGETLIB=libpicc_i2c_thsensor.$(LIBEXT)
 LINKOPTIONS:=-L build/
 
-lib_objects = src/picc_temp_i2c.o
-lib_example = example/example.cpp
+lib_objects = src/picc_i2c_temp.o
+lib_example = example/example.c
 
 all: build/$(TARGETLIB) example/example
 
