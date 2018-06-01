@@ -31,7 +31,7 @@ build/$(TARGETLIB): $(lib_objects) build
 	$(LD) $(LDFLAGS) $(lib_objects) -o $@
 
 example/example: $(lib_example)
-	$(CC) -o $@ -Iinclude/ $(LINKOPTIONS) $(lib_example) -lpicc_i2c_thsensor
+	$(CC) -o -std=gnu99 $@ -Iinclude/ $(LINKOPTIONS) $(lib_example) -lpicc_i2c_thsensor
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@ 
