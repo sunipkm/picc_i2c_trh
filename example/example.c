@@ -27,7 +27,7 @@ int main ( void )
 		time = time + 10 ;
 		if ( time > 20 )
 			break ;
-		hdc1010::sleep(10000) ; //spit out numbers in 1 second intervals
+		hdc1010_sleep(10000) ; //spit out numbers in 1 second intervals
 		for ( uint8_t i = 0 ; i < 8 ; i++ )
 			printf("\x1b[A") ;
 	}
