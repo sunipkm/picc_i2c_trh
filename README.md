@@ -56,7 +56,10 @@ The driver is written in C, and the device specific variables are stored inside 
    This method returns the manufacturer ID of the device `dev` (`0x5449` for Texas Instrument).
    
 4. `hdc1010_readDevID(hdc1010_dev * dev)`:
-   This method returns the base address of the device `dev` on the I2C bus (`0x40`).
+   This method returns the identification of the device `dev` on the I2C bus (`0x1000`). These two numbers help identify the device, and should be used as sanity checks when setting up the devices to ensure proper connection etc.
+   
+4a. `hdc1010_dev dev -> address`:
+   This variable stores the address of the device on the I2C bus.
    
 5. `hdc1010_readReg(hdc1010_dev * dev)`:
    This method reads the configuration register (register `0x02`) of the device `dev` and returns its contents as `hdc1010_regs` structure. The structure has the following accessible members:
