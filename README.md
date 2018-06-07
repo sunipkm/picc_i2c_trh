@@ -85,6 +85,8 @@ The driver is written in C, and the device specific variables are stored inside 
    
 9. `hdc1010_readH(hdc1010_dev * dev)`:
    This method makes a measurement of relative humidity sensed by `dev` and returns the value in floating point format.
+   
+   Note: If the device is in simultaneous measurement mode, it does not make a measurement until both temperature and humidity measurements have been read. 
 
 10. `hdc1010_free(hdc1010_dev * dev)`:
   This method closes the bus open for the device and clears all allocated memory.
@@ -92,4 +94,4 @@ The driver is written in C, and the device specific variables are stored inside 
    
 There is also a function `hdc1010_sleep(unsigned long)` defined, which takes in the number of milliseconds to sleep. This is a wrapper around the LINUX system call `usleep`.
 
-A full precision (14-bit) temperature or relative humidity measurement takes 6.35 ms according to the TI documentation (reference I2C clock 400 kHz). The system sleeps for 30 ms after each measurement is read before reading the output (as the data ready indicator is unused). This should give the system ample time to perform the measurement. The time-lapse between request and read can be altered by providing the value for the macro `PICC_TIME_USEC` (in microseconds) in `CXXFLAGS` during `make`.
+A full precision (14-bit) temperature or relative humidity measurement takes 6.35 ms according to the TI documentation (reference I2C clock 400 kHz). The system sleeps for 30 ms after each measurement is read before reading the output (as the data ready indicator is unused). This should give the system ample time to perform the measurement. The time-lapse between request and read can be altered by providing the value for the macro `PICC_TIME_USEC` (in microseconds) in `CFLAGS` during `make`.
